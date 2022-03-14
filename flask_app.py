@@ -23,6 +23,16 @@ db = SQLAlchemy(app)
 
 CORS(app, resources={r"/*": {"origins": "*"}})
 
+class User(db.Model):
+    __tablename__ = "users"
+    hash = db.Column(db.String(32), primary_key=True)
+    username = db.Column(db.String(32), nullable=False)
+    score = db.Column(db.Integer)
+
+    def __repr__(self):
+        #return '<User {}>'.format(self.username)
+        return f'{self.username} - {self.score}'
+
 
 @app.route('/hello')
 def hello_world():
@@ -32,10 +42,10 @@ def hello_world():
 def user():
     if request.method == 'GET':
         # Return a specific user based on its hash, otherwise return nothing
-        return 'GET'
+        return 'GETTING A USER'
     elif request.method == 'POST':
         # Create a new user via user with the supplied username and hash, and empty asides from that
-        return 'POST'
+        return 'POSTING A USER'
 
 @app.route('/score', methods=['GET', 'POST'])
 def score():
