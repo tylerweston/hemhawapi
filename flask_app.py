@@ -42,21 +42,37 @@ def hello_world():
 def user():
     if request.method == 'GET':
         # Return a specific user based on its hash, otherwise return nothing
-        return 'GETTING A USER'
+        hash = request.args.get('hash')
+        if hash:
+            user = User.query.filter_by(hash=hash).first()
+            if user:
+                return user.__repr__()
+            else:
+                return 'User not found'
+        return 'No hash provided'
     elif request.method == 'POST':
         # Create a new user via user with the supplied username and hash, and empty asides from that
-        return 'POSTING A USER'
+        user = User(username=request.form['username'], hash=request.form['hash'], score=0)
+        db.session.add(user)
+        db.session.commit()
+        return 'Posted user'
 
 @app.route('/score', methods=['GET', 'POST'])
 def score():
     #return f"{username} scored {word}"
     if request.method == 'GET':
-        # return our list of words
-        return {'JarLapris': ['flamboyant'], 'tylerweston': ['zugzwanging']}
+        # Return a list of the top 50 scores in database
+        scores = User.query.order_by(User.score.desc()).limit(50)
+        return '\n'.join([str(score) for score in scores])
+
     if request.method == 'POST':
-        # # extract username and submitted word
-        # data = request.form
-        print(request.args)
-        username = request.args.get('username')
-        word = request.args.get('word')
-        return f"{username} scored {word}"
+        # update the score of a user, we should take a hash and a score
+        hash = request.form['hash']
+        score = request.form['score']
+        user = User.query.filter_by(hash=hash).first()
+        if user:
+            user.score += score
+            db.session.commit()
+            return 'Updated score'
+        else:
+            return 'User not found'
