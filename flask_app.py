@@ -8,6 +8,7 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="tylerweston",
@@ -20,8 +21,6 @@ app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
-
-CORS(app, resources={r"/*": {"origins": "*"}})
 
 class User(db.Model):
     __tablename__ = "users"
@@ -52,7 +51,7 @@ def user():
         return 'No hash provided'
     elif request.method == 'POST':
         # Create a new user via user with the supplied username and hash, and empty asides from that
-        user = User(username=request.form['username'], hash=request.form['hash'], score=0)
+        user = User(username=request.form['name'], hash=request.form['hash'], score=0)
         db.session.add(user)
         db.session.commit()
         return 'Posted user'
