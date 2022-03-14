@@ -28,6 +28,15 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 def hello_world():
     return 'Hello from Flask!'
 
+@app.route('/user', methods=['GET', 'POST'])
+def user():
+    if request.method == 'GET':
+        # Return a specific user based on its hash, otherwise return nothing
+        return 'GET'
+    elif request.method == 'POST':
+        # Create a new user via user with the supplied username and hash, and empty asides from that
+        return 'POST'
+
 @app.route('/score', methods=['GET', 'POST'])
 def score():
     #return f"{username} scored {word}"
