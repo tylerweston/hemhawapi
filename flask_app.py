@@ -2,13 +2,14 @@
 # Tyler Weston, March 2022
 
 from flask import Flask
+from flask_cors import CORS, cross_origin
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+
 
 app = Flask(__name__)
 app.config["DEBUG"] = True
-CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username="tylerweston",
@@ -20,6 +21,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+#CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 
 class User(db.Model):
@@ -34,10 +36,12 @@ class User(db.Model):
 
 
 @app.route('/hello')
+@cross_origin()
 def hello_world():
     return 'Hello from Flask!'
 
 @app.route('/user', methods=['GET', 'POST'])
+@cross_origin()
 def user():
     if request.method == 'GET':
         # Return a specific user based on its hash, otherwise return nothing
@@ -57,6 +61,7 @@ def user():
         return 'Posted user'
 
 @app.route('/score', methods=['GET', 'POST'])
+@cross_origin()
 def score():
     #return f"{username} scored {word}"
     if request.method == 'GET':
