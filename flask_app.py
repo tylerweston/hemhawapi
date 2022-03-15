@@ -55,7 +55,7 @@ def user():
         return 'No hash provided'
     elif request.method == 'POST':
         # Create a new user via user with the supplied username and hash, and empty asides from that
-        user = User(username=request.form['name'], hash=request.form['hash'], score=0)
+        user = User(username=request.args.get('name'), hash=request.args.get('hash'), score=0)
         db.session.add(user)
         db.session.commit()
         return 'Posted user'
@@ -71,8 +71,8 @@ def score():
 
     if request.method == 'POST':
         # update the score of a user, we should take a hash and a score
-        hash = request.form['hash']
-        score = request.form['score']
+        hash = request.args.get('hash')
+        score = request.args.get('score')
         user = User.query.filter_by(hash=hash).first()
         if user:
             user.score += score
