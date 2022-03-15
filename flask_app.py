@@ -75,7 +75,7 @@ def score():
         score = request.args.get('score')
         user = User.query.filter_by(hash=hash).first()
         if user:
-            user.score += score
+            user.score += int(score)
             db.session.commit()
             return 'Updated score'
         else:
