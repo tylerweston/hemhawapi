@@ -16,6 +16,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config["DEBUG"] = True
 
 
@@ -67,7 +69,8 @@ def user():
         return 'No hash provided'
     elif request.method == 'POST':
         # Create a new user via user with the supplied username and hash, and empty asides from that
-        user = User(name=request.args.get('name'), hash=request.args.get('hash'), score=0)
+        user = User(name=request.args.get('name'), hash=request.args.get('hash'), total_score=0,
+                    easy_score=0, medium_score=0, hard_score=0, blitz_score=0)
         db.session.add(user)
         db.session.commit()
         return 'Posted user'
