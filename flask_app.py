@@ -85,6 +85,8 @@ def score():
         return '\n'.join([str(score) for score in scores])
 
     if request.method == 'POST':
+        print("Received POST request")
+        print(request.args)
         # update the score of a user, we should take a hash and a score
         hash = request.args.get('hash')
         total_score = request.args.get('score')
@@ -114,6 +116,7 @@ def score():
 @app.route('/globalposition', methods=['GET'])
 @cross_origin()
 def get_global_position():
+    print("Getting user global position")
     # get the total number of users in the database
     hash = request.args.get('hash')
     user = User.query.filter_by(hash=hash).first()
@@ -145,4 +148,7 @@ def get_global_position():
 
     # get the total number of users
     total_users = User.query.count()
-    return f'{str(position)}/{str(total_users)}'
+
+    result = f'{str(position)}/{str(total_users)}'
+    print(result)
+    return result
