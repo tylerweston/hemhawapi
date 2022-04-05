@@ -13,8 +13,6 @@ from flask import Flask
 from flask_cors import CORS, cross_origin
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
-import requests
-
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -48,7 +46,7 @@ class User(db.Model):
 
     def __repr__(self):
         #return '<User {}>'.format(self.username)
-        return f'{self.username} - {self.total_score}'
+        return f'{self.name} - {self.total_score}'
 
 
 @app.route('/user', methods=['GET', 'POST'])
@@ -98,7 +96,7 @@ def score():
     if request.method == 'GET':
         # Return a list of the top 50 scores in database
         scores = User.query.order_by(User.total_score.desc()).limit(50)
-        return '\n'.join([str(score) for score in scores])
+        return '\n'.join([f"#{i}: {str(score)}" for i, score in enumerate(scores)])
 
     if request.method == 'POST':
         # update the score of a user, we should take a hash and a score
