@@ -34,6 +34,7 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 #CORS(app, resources={r"/*": {"origins": "*"}})
 db = SQLAlchemy(app)
 
+
 class User(db.Model):
     __tablename__ = "users"
     hash = db.Column(db.String(32), primary_key=True)
@@ -48,11 +49,6 @@ class User(db.Model):
         #return '<User {}>'.format(self.username)
         return f'{self.username} - {self.total_score}'
 
-
-@app.route('/hello')
-@cross_origin()
-def hello_world():
-    return 'Hello from Flask!'
 
 @app.route('/user', methods=['GET', 'POST'])
 @cross_origin()
@@ -69,11 +65,30 @@ def user():
         return 'No hash provided'
     elif request.method == 'POST':
         # Create a new user via user with the supplied username and hash, and empty asides from that
+        # TODO: Validate hash
         user = User(name=request.args.get('name'), hash=request.args.get('hash'), total_score=0,
                     easy_score=0, medium_score=0, hard_score=0, blitz_score=0)
         db.session.add(user)
         db.session.commit()
         return 'Posted user'
+
+
+@app.route('/rename', methods=['PUT'])
+@cross_origin()
+def rename():
+    # Rename a user
+    # get user by hash
+    # set name to new name
+    # commit
+    hash = request.args.get('hash')
+    name = request.args.get('name')
+    user = User.query.filter_by(hash=hash).first()
+    if not user:
+        return 'User not found'
+    user.name = name
+    db.session.commit()
+    return 'Renamed user'
+        
 
 @app.route('/score', methods=['GET', 'POST'])
 @cross_origin()
