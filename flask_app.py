@@ -170,8 +170,10 @@ def get_global_position():
 
     result = f'{str(position)}/{str(total_users)}'
     print(result)
-    response = requests.get(
-        data=result,
-        headers={'Content-Type': 'text/plain'},
-    )
-    return response.content
+    # return result as plain text
+    return result
+    # response = requests.get(
+    #     data=result,
+    #     headers={'Content-Type': 'text/plain'},
+    # )
+    # return response.content
