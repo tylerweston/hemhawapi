@@ -101,8 +101,6 @@ def score():
         return '\n'.join([str(score) for score in scores])
 
     if request.method == 'POST':
-        print("Received POST request")
-        print(request.args)
         # update the score of a user, we should take a hash and a score
         hash = request.args.get('hash')
         total_score = request.args.get('score')
@@ -113,11 +111,9 @@ def score():
         user = User.query.filter_by(hash=hash).first()
 
         if not user:
-            print("Didn't find any user")
             return 'User not found'
 
         user.total_score += int(total_score)
-        print(f"Total score: {user.total_score}")
         if easy_score != '0':
             user.easy_score = int(easy_score)
         if medium_score != '0':
@@ -127,7 +123,6 @@ def score():
         if blitz_score != '0':
             user.blitz_score = int(blitz_score)
         
-        print("Commiting session...")
         db.session.commit()
         return 'Updated score'
 
@@ -135,7 +130,6 @@ def score():
 @app.route('/globalposition', methods=['GET'])
 @cross_origin()
 def get_global_position():
-    print("Getting user global position")
     # get the total number of users in the database
     hash = request.args.get('hash')
     user = User.query.filter_by(hash=hash).first()
@@ -169,11 +163,5 @@ def get_global_position():
     total_users = User.query.count()
 
     result = f'{str(position)}/{str(total_users)}'
-    print(result)
-    # return result as plain text
     return result
-    # response = requests.get(
-    #     data=result,
-    #     headers={'Content-Type': 'text/plain'},
-    # )
-    # return response.content
+
