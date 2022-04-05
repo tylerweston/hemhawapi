@@ -117,13 +117,13 @@ def score():
 
         user.total_score += int(total_score)
         print(f"Total score: {user.total_score}")
-        if easy_score:
+        if easy_score != '0':
             user.easy_score = int(easy_score)
-        if medium_score:
+        if medium_score != '0':
             user.medium_score = int(medium_score)
-        if hard_score:
+        if hard_score != '0':
             user.hard_score = int(hard_score)
-        if blitz_score:
+        if blitz_score != '0':
             user.blitz_score = int(blitz_score)
         
         print("Commiting session...")
