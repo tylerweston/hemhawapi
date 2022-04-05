@@ -115,6 +115,7 @@ def score():
             return 'User not found'
 
         user.total_score += int(total_score)
+        print(f"Total score: {user.total_score}")
         if easy_score:
             user.easy_score = int(easy_score)
         if medium_score:
@@ -124,6 +125,7 @@ def score():
         if blitz_score:
             user.blitz_score = int(blitz_score)
         
+        print("Commiting session...")
         db.session.commit()
         return 'Updated score'
 
