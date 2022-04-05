@@ -112,6 +112,7 @@ def score():
         user = User.query.filter_by(hash=hash).first()
 
         if not user:
+            print("Didn't find any user")
             return 'User not found'
 
         user.total_score += int(total_score)
