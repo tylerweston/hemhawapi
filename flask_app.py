@@ -13,6 +13,7 @@ from flask import Flask
 from flask_cors import CORS, cross_origin
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
+import requests
 
 
 app = Flask(__name__)
@@ -169,4 +170,8 @@ def get_global_position():
 
     result = f'{str(position)}/{str(total_users)}'
     print(result)
-    return result
+    response = requests.get(
+        data=result,
+        headers={'Content-Type': 'text/plain'},
+    )
+    return response.content
