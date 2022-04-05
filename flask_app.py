@@ -96,7 +96,7 @@ def score():
     if request.method == 'GET':
         # Return a list of the top 50 scores in database
         scores = User.query.order_by(User.total_score.desc()).limit(50)
-        return '\n'.join([f"#{i}: {str(score)}" for i, score in enumerate(scores)])
+        return '\n'.join([str(score) for score in scores])
 
     if request.method == 'POST':
         # update the score of a user, we should take a hash and a score
