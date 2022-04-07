@@ -67,6 +67,7 @@ def user():
         # TODO: Validate hash
         user = User(name=request.args.get('name'), hash=request.args.get('hash'), total_score=0,
                     easy_score=0, medium_score=0, hard_score=0, blitz_score=0)
+        print(f"User created: {user.name}")
         db.session.add(user)
         db.session.commit()
         return 'Posted user'
@@ -84,6 +85,7 @@ def rename():
     user = User.query.filter_by(hash=hash).first()
     if not user:
         return 'User not found'
+    print(f"{user.name} -> {name}")
     user.name = name
     db.session.commit()
     return 'Renamed user'
