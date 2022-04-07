@@ -96,8 +96,8 @@ def rename():
 def score():
     #return f"{username} scored {word}"
     if request.method == 'GET':
-        # Return a list of the top 50 scores in database
-        scores = User.query.order_by(User.total_score.desc()).limit(50)
+        # Return a list of the top 10 scores in database
+        scores = User.query.order_by(User.total_score.desc()).limit(10)
         return '\n'.join([str(score) for score in scores])
 
     if request.method == 'POST':
